@@ -60,5 +60,27 @@ ip -n blue addr add 192.168.15.2 dev veth-blue
 ip -n red link set veth-red up
 ip -n blue link set veth-blue up
 ```
-- To see if it worked , trying to ping from red ns to the ip of blue
+- Error while pinging from red ns to ip of blue [resource](https://serverfault.com/questions/1073415/cant-ping-internal-network-namespace)
+Network is unreachable
+- Reason : forgot to add netmask when adding the ip address
+- First flusing previous addr
 ``` sh
+ip -n red addr flush dev veth-red
+ip -n blue addr flush dev veth-blue
+```
+- Then assign new ip addr with cidr 24 or even 30 will work as hosts are less
+``` sh
+ip -n red addr add 192.168.15.1/24 dev veth-red
+ip -n blue addr add 192.168.15.2/24 dev veth-blue
+```
+
+- Now trying to ping from red ns to ip of blue
+``` sh
+ip netns exec red ping -c2 192.168.15.2
+```
+![image](https://github.com/KRIISHSHARMA/net-namespace/assets/86760658/312ce511-a5ab-4dee-8503-ba605cf077cb)
+
+- red identified blue (host has no clue about these about these ns)
+
+![image](https://github.com/KRIISHSHARMA/net-namespace/assets/86760658/9bce2fb5-07dc-46e3-a4c1-79268d62743c)
+

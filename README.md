@@ -84,3 +84,6 @@ ip netns exec red ping -c2 192.168.15.2
 
 ![image](https://github.com/KRIISHSHARMA/net-namespace/assets/86760658/9bce2fb5-07dc-46e3-a4c1-79268d62743c)
 
+# To connect multiple ns have to create virt network switch 
+- have to create a virt switch within our host and connect ns to it
+- some virt switches : OvS , linux bridge 

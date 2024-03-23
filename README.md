@@ -31,5 +31,18 @@ ip netns exec <name of ns> <cmd>
 ip netns exec red ip link
 ip -n red ip link
 ```
-- `ip link` (or [arp](https://www.baeldung.com/linux/arp-command)) inside netns will only show loopback interface and not eth0 or any other host network interfaces (successfully preventing the container from seeing host interface)
+- `ip link` (or [arp](https://www.baeldung.com/linux/arp-command) , `route`) inside netns will only show loopback interface and not eth0 or any other host network interfaces (successfully preventing the container from seeing host interface)
+-  [arp](https://www.baeldung.com/linux/arp-command) : The Address Resolution Protocol (ARP) handles the mapping between an Internet Protocol (IP) address and a Media Access Control (MAC) address. Linux stores all such mappings in a local system cache called an ARP table.
+
+# Connecting ns with veth/virt cable
+- To create the cable (specify the 2 ends veth-red and veth-blue
+``` sh
+ip link add veth-red type veth peer name veth-blue
+```
+- Now attach each interafce with appropriate ns
+``` sh
+ip link set veth-red netns red
+ip link set veth-blue netns blue
+```
+
 
